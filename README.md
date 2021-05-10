@@ -36,6 +36,11 @@ A simple Python script for SABnzbd to interact with the SRRdb API
 
 - Check if rescene is installed and alert the user to install manually or attempt to auto-install via pip.
 
+  ```
+  # apt-get install python3-setuptools
+  # pip install pyrescene
+  ```
+
 ### Example:
 ```
 Directory name: Big.Buck.Bunny.2008.DTS.1080p.BluRay.x264-DARM
