@@ -19,7 +19,7 @@ A simple Python post-processing script for SABnzbd to interact with the SRRdb AP
 
 - Extract the contents of the srr file to provide missing nfo etc.
 
-- Use rescene to verify (srr.py -q) if the scene file matches the correct crc32 according to srr.
+- Use rescene to verify (srr.py -q) if the scene file(s) matches the correct crc32 according to srr or sfv.
 
 
 ## TODO:
