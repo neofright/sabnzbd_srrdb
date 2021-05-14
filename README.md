@@ -21,9 +21,6 @@ A simple Python post-processing script for SABnzbd to interact with the SRRdb AP
 
 - Use rescene to verify (srr.py -q) if the scene file matches the correct crc32 according to srr.
 
-- Exit based on the rescene verification (srr.py -q) result.
-
-
 
 ## TODO:
 - Abort if literal " " detected anywhere in release name (against scene rules) as it is likely p2p.
