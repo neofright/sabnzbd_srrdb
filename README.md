@@ -28,10 +28,6 @@ A simple Python post-processing script for SABnzbd to interact with the SRRdb AP
 ## TODO:
 - Abort if literal " " detected anywhere in release name (against scene rules) as it is likely p2p.
 
-- Improve mkv file glob so that it always selects the largest mkv file (maybe some people keep samples?)
-
-- extend script to work for more than just movies - could be used to verify TV, MP3, Games and software too... This can be done by checking the category, and for games using .iso extension instead of .mkv etc. if searching for music - you can only search by name - crc search does not work.
-
 - Add the ability to supply credentials for SRRdb
 
 - Check if rescene is installed and alert the user to install manually or attempt to auto-install via pip.
