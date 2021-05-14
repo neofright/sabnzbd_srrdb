@@ -37,12 +37,13 @@ A simple Python post-processing script for SABnzbd to interact with the SRRdb AP
   # pip install pyrescene
   ```
 
-### Example:
+## Example:
 ```
 Directory name: Big.Buck.Bunny.2008.DTS.1080p.BluRay.x264-DARM
 No srr file found from release, attempting to fetch from srrdb...
 SRRdb release identified name, downloading srr...
 Extracting contents of srr file...
+Renaming abcd1234.mkv to darm-bigbuckbunny-1080p.mkv.
 Attempting to verify darm-bigbuckbunny-1080p.mkv against Big.Buck.Bunny.2008.DTS.1080p.BluRay.x264-DARM.srr...
 File OK: darm-bigbuckbunny-1080p.mkv.
 ```
