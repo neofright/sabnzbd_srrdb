@@ -15,7 +15,7 @@ A simple Python post-processing script for SABnzbd to interact with the SRRdb AP
 
 - If no srr can be found, exit. Maybe this is not a scene release or maybe multi episode tv nzb etc....
 
-- Use srr file to rename the release file to correct name - this is better deobfuscation than renaming the file to SAB_FILENAME
+- Use srr file to rename the release file to correct name - this is better deobfuscation than renaming the file to SAB_FILENAME + '.ext'
 
 - Extract the contents of the srr file to provide missing nfo etc.
 
@@ -34,7 +34,8 @@ A simple Python post-processing script for SABnzbd to interact with the SRRdb AP
   # pip install pyrescene
   ```
 
-## Example:
+## Examples:
+### Movie
 ```
 Directory name: Big.Buck.Bunny.2008.DTS.1080p.BluRay.x264-DARM
 No srr file found from release, attempting to fetch from srrdb...
@@ -43,4 +44,23 @@ Extracting contents of srr file...
 Renaming abcd1234.mkv to darm-bigbuckbunny-1080p.mkv.
 Attempting to verify darm-bigbuckbunny-1080p.mkv against Big.Buck.Bunny.2008.DTS.1080p.BluRay.x264-DARM.srr...
 File OK: darm-bigbuckbunny-1080p.mkv.
+```
+### Music
+```
+Directory name: Arist_Name-Album_Name-CD-FLAC-0000-FOOBAR
+No srr file found from release, attempting to fetch from srrdb...
+SRRdb release identified name, downloading srr...
+Extracting contents of srr file...
+01-artist_name-track_name.flac OK
+02-artist_name-track_name.flac OK
+03-artist_name-track_name.flac OK
+04-artist_name-track_name.flac OK
+05-artist_name-track_name.flac OK
+06-artist_name-track_name.flac OK
+07-artist_name-track_name.flac OK
+08-artist_name-track_name.flac OK
+09-artist_name-track_name.flac OK
+10-artist_name-track_name.flac OK
+11-artist_name-track_name.flac OK
+Everything OK
 ```
