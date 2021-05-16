@@ -66,7 +66,7 @@ def download_release_srr(srr_url):
         with open(file_path, 'wb') as srr_file_path:
             srr_file_path.write(srr_file.content)
     
-def search_for_and_download_srr(search_query):
+def search_for_and_download_srr(search_query, media_file):
     """
         calls method search_srrdb_api() and attempts to find an srr by searching the directory name
         if no results are found by the directory name, we calculate the crc32 of the mkv and search on that
@@ -78,7 +78,7 @@ def search_for_and_download_srr(search_query):
         return True
     else:
         print("No srrDB release identified by name. Attempting to find release by crc32 hash...")
-        crc32_hash = "%0.8X" % rescene.utility.calculate_crc32(mkv_file)
+        crc32_hash = "%0.8X" % rescene.utility.calculate_crc32(media_file)
         srr_download_url = search_srrdb_api(crc32_hash,'archive')
         if srr_download_url != None:
             print("Release identified by crc32 hash, downloading srr...")
@@ -89,7 +89,7 @@ def search_for_and_download_srr(search_query):
             os.environ['SAB_FAIL_MSG'] = "No srr available for release."
             sys.exit(3)
     
-def get_srr_file(release_dir):
+def get_srr_file(release_dir, media_file):
     srr_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.srr'))
     if len(srr_files):
         for srr_file in srr_files:
@@ -102,7 +102,7 @@ def get_srr_file(release_dir):
                 return os.path.join(release_dir, release_basename + ".srr")
     else:
         print("No srr file found from release, attempting to fetch from srrdb...")
-        if search_for_and_download_srr(release_basename):
+        if search_for_and_download_srr(release_basename, media_file):
             return pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.srr'))[0]
             
 def deobfuscate_scene_file(srr_file, media_file):
@@ -152,8 +152,9 @@ release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP
 release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
 
 print("Directory name: %s" % release_basename)
+media_file = return_largest_file(pyglob.escape(release_dir))
 ## Search for existing srr file and attempt to fetch if missing (method hopefully returns the full path)...
-srr_file = get_srr_file(release_dir)
+srr_file = get_srr_file(release_dir, media_file)
             
 ## If an srr file has been found...
 if srr_file:
@@ -167,6 +168,5 @@ if srr_file:
     for srs_file in srs_files:
         os.remove(srs_file)
 
-    media_file = return_largest_file(pyglob.escape(release_dir))
     deobfuscate_scene_file(srr_file, media_file)
     verify_scene_rls(srr_file, release_dir)
