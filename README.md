@@ -32,7 +32,7 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
   ```
   # dnf install -y python3-pip
   # apt-get install python3-setuptools
-  # pip install pyrescene
+  # pip3 install pyrescene
   ```
 
 ## Examples:
