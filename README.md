@@ -30,6 +30,7 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
 - Check if rescene is installed and alert the user to install manually or attempt to auto-install via pip.
 
   ```
+  # dnf install -y python3-pip
   # apt-get install python3-setuptools
   # pip install pyrescene
   ```
