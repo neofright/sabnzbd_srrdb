@@ -1,5 +1,5 @@
 # sabnzbd_srrdb
-A simple Python post-processing script for SABnzbd to interact with the SRRdb API.
+A simple Python post-processing script for SABnzbd to interact with [pyrescene](https://bitbucket.org/Gfy/pyrescene/src) and the SRRdb API.
 
 ## Features:
 
