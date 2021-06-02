@@ -3,7 +3,7 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
 
 ## Features:
 
-- Check if srr exists in release folder; if exists rename srr to SAB_FILENAME.
+- Check if srr exists in release folder; if exists rename srr to SAB_FILENAME + '.srr'.
 
 - If an srr file does not exist; search for the srr by name with SRRdb API and download.
 
@@ -23,16 +23,25 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
 
 
 ## TODO:
-- Abort if literal " " detected anywhere in release name (against scene rules) as it is likely p2p.
-
 - Add the ability to supply credentials for SRRdb
 
-- Check if rescene is installed and alert the user to install manually or attempt to auto-install via pip.
 
+## Installation:
+If you are using bare-metal or non containerised OS you can install pyrescene via pip. I have also included a requirements.txt
+
+Fedora
   ```
   # dnf install -y python3-pip
+  ```
+Debian based
+  ```
   # apt-get install python3-setuptools
+  ```
+Finally 
+  ```
   # pip3 install pyrescene
+  OR
+  # pip3 install -r requirements.txt
   ```
 
 ## Examples:
