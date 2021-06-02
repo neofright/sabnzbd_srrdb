@@ -113,11 +113,12 @@ def deobfuscate_scene_file(srr_file, media_file):
             ext_filename = afile.file_name
         
         if ext_filename != None:
-            media_basename = os.path.basename(media_file)
-            ## Compare the returned archived file name with our media file        
-            if media_basename != ext_filename:
-                print("Renaming %s to %s." % (media_basename, ext_filename) )
-                os.rename(media_file, os.path.join(release_dir, ext_filename))
+            media_basename = os.path.basename(media_file)            
+            if os.path.splitext(media_basename)[1].lower() == os.path.splitext(ext_filename)[1].lower():
+                ## Compare the returned archived file name with our media file
+                if media_basename != ext_filename:
+                    print("Renaming %s to %s." % (media_basename, ext_filename) )
+                    os.rename(media_file, os.path.join(release_dir, ext_filename))
 
 def verify_scene_rls(srr_file, release_dir):
     archived_files = rescene.info(srr_file)["archived_files"].values()
@@ -151,6 +152,11 @@ def return_largest_file(release_dir):
 release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
 release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
 
+## Abort post processing for releases with whitespace in their name
+if len(release_basename.split()) > 1:
+    print("Literal space in release name (P2P?). Skipping.")
+    sys.exit(0)
+
 print("Directory name: %s" % release_basename)
 media_file = return_largest_file(pyglob.escape(release_dir))
 ## Search for existing srr file and attempt to fetch if missing (method hopefully returns the full path)...
@@ -162,7 +168,7 @@ if srr_file:
     ## Remove .srs files as they can happily remain in the srr
     ## Easier to extract everything and then remove the .srs files than it is to try and simulate the command below:
     ## srr.py *.srr --always-yes --extract-regex='^.*\.(nfo|sfv)$'
-    print("Extracting contents of srr file...")    
+    print("Extracting contents of srr file...")
     rescene.extract_files(os.path.normpath(srr_file), os.path.normpath(release_dir), False)
     srs_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.srs'))
     for srs_file in srs_files:
