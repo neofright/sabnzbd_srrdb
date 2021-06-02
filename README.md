@@ -75,3 +75,5 @@ Extracting contents of srr file...
 11-artist_name-track_name.flac OK
 Everything OK
 ```
+## How do I know if a release is 'scene' when searching?!
+If your indexer supports it you can filter non predb releases on their website, or thanks to [this feature](https://github.com/theotherp/nzbhydra2/issues/647) in [nzbhydra2](https://github.com/theotherp/nzbhydra2) you can return only scene releases.
