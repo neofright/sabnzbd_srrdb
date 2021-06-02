@@ -73,7 +73,7 @@ def search_for_and_download_srr(search_query, media_file):
     """
     srr_download_url = search_srrdb_api(search_query, 'query')
     if srr_download_url != None:
-        print("SRRdb release identified name, downloading srr...")
+        print("SRRdb release identified by name, downloading srr...")
         download_release_srr(srr_download_url)
         return True
     else:
