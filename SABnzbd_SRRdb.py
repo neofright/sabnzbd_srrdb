@@ -10,8 +10,7 @@ import pprint
 os.environ["RESCENE_NO_SPINNER"] = str(True)
 import rescene
 from rescene.srr import *
-from rescene.utility import calculate_crc32
-from rescene.utility import parse_sfv_file
+from rescene.utility import calculate_crc32, parse_sfv_file
 
 from urllib.parse import urlsplit
 import sys
@@ -133,7 +132,13 @@ def verify_scene_rls(srr_file, release_dir):
                 audio_file = str(sfv_entry).split()[0]
                 audio_crc = str(sfv_entry).split()[1]
                 
-                crc32_hash = "%0.8X" % rescene.utility.calculate_crc32(os.path.join(release_dir, audio_file))
+                ## Some SFV files have incorrect case and were generated on Windows/non *NIX os...
+                ## The proper solution would be something like a find -iname on the track name.
+                audio_file_full_path = os.path.join(release_dir, audio_file)
+                if not os.path.isfile(audio_file_full_path):
+                    audio_file_full_path = os.path.join(release_dir, audio_file.lower())
+                
+                crc32_hash = "%0.8X" % rescene.utility.calculate_crc32(audio_file_full_path)
                 if audio_crc.lower() == crc32_hash.lower():
                     print(audio_file + " OK")
                 else:
@@ -168,8 +173,10 @@ if srr_file:
     out_folder = os.path.normpath(release_dir)
     ## Extract only the file types from srr in the regex below:
     to_extract = re.compile('^.*\.(nfo|m3u|jpg|sfv)$', re.IGNORECASE)
+    def decide_extraction(stored_fn):
+        return to_extract.match(stored_fn)
     ####################################################################
-    files = rescene.extract_files(os.path.normpath(srr_file), out_folder, False)
+    files = rescene.extract_files(os.path.normpath(srr_file), out_folder, False, matcher=decide_extraction)
 
     # show which files are extracted + success or not
     for efile, success in files:
