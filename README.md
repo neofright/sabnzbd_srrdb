@@ -77,3 +77,10 @@ Everything OK
 ```
 ## How do I know if a release is 'scene' when searching?!
 If your indexer supports it you can filter non predb releases on their website, or thanks to [this feature](https://github.com/theotherp/nzbhydra2/issues/647) in [nzbhydra2](https://github.com/theotherp/nzbhydra2) you can return only scene releases.
+
+## How can I use this script outside of SABnzbd?
+```
+cd /path/to/a/release
+export SAB_COMPLETE_DIR="$PWD"; export SAB_FINAL_NAME="$(basename "$PWD")"
+/path/to/location/of/SABnzbd_SRRdb.py
+```
