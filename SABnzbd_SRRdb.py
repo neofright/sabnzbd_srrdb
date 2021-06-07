@@ -96,8 +96,8 @@ def get_srr_file(release_dir, media_file):
             ## Some srr files contain another nested srr for the subs of the movie as the main archived file.
             if 'subs' not in srr_file:
                 print("Found: %s" % os.path.basename(srr_file))
-                if os.path.basename(srr_file) != release_basename + ".srr":
-                    print("Renaming %s to %s." % (srr_file, release_basename + ".srr"))
+                if os.path.basename(srr_file).lower() != release_basename.lower() + ".srr":
+                    print("Renaming %s to %s." % (os.path.basename(srr_file), release_basename + ".srr"))
                     os.rename(srr_file, os.path.join(release_dir, release_basename + ".srr"))
                 return os.path.join(release_dir, release_basename + ".srr")
     else:
@@ -159,20 +159,29 @@ if len(release_basename.split()) > 1:
 
 print("Directory name: %s" % release_basename)
 media_file = return_largest_file(pyglob.escape(release_dir))
-## Search for existing srr file and attempt to fetch if missing (method hopefully returns the full path)...
+## Search for existing srr file and attempt to fetch if missing (function hopefully returns the full path)...
 srr_file = get_srr_file(release_dir, media_file)
             
 ## If an srr file has been found...
 if srr_file:
-    ## Extract files stored in the srr file (nfo,m3u,srr,srs,sfv etc.)
-    ## Remove .srs files as they can happily remain in the srr
-    ## Easier to extract everything and then remove the .srs files than it is to try and simulate the command below:
-    ## srr.py *.srr --always-yes --extract-regex='^.*\.(nfo|sfv)$'
-    print("Extracting contents of srr file...")
-    rescene.extract_files(os.path.normpath(srr_file), os.path.normpath(release_dir), False)
-    srs_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.srs'))
-    for srs_file in srs_files:
-        os.remove(srs_file)
+    ####################################################################
+    out_folder = os.path.normpath(release_dir)
+    ## Extract only the file types from srr in the regex below:
+    to_extract = re.compile('^.*\.(nfo|m3u|jpg|sfv)$', re.IGNORECASE)
+    ####################################################################
+    files = rescene.extract_files(os.path.normpath(srr_file), out_folder, False)
 
+    # show which files are extracted + success or not
+    for efile, success in files:
+        file_name = efile[len(out_folder) + 1:]
+        if success:
+            print("{0}: extracted.".format(file_name))
+        else:
+            print("{0}: not extracted!".format(file_name), file=sys.stderr)
+
+    if not len(files):
+        print("No matching files to extract.")
+    ####################################################################
     deobfuscate_scene_file(srr_file, media_file)
     verify_scene_rls(srr_file, release_dir)
+    ####################################################################
