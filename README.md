@@ -3,7 +3,7 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
 
 ## Features:
 
-- Use an srr file to rename the release file to correct name - this is better deobfuscation than renaming the file to SAB_FILENAME + '.ext'
+- Use an srr file to rename the release file to the correct filename - this is better deobfuscation than renaming the file to SAB_FILENAME + '.ext'
 
 - Extract the contents of the srr file to provide missing nfo, m3u, sfv and jpg files.
 
