@@ -3,19 +3,7 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
 
 ## Features:
 
-- Check if srr exists in release folder; if exists rename srr to SAB_FILENAME + '.srr'.
-
-- If an srr file does not exist; search for the srr by name with SRRdb API and download.
-
-- If no srr results by name are found, search for the srr by crc32.
-
-- Abort the post processing script if the SRRdb API returns more than one result.
-
-- Warn and exit if you are above your daily file quota from SRRdb.
-
-- If no srr can be found, exit. Maybe this is not a scene release or maybe multi episode tv nzb etc....
-
-- Use srr file to rename the release file to correct name - this is better deobfuscation than renaming the file to SAB_FILENAME + '.ext'
+- Use an srr file to rename the release file to the correct filename - this is better deobfuscation than renaming the file to SAB_FILENAME + '.ext'
 
 - Extract the contents of the srr file to provide missing nfo, m3u, sfv and jpg files.
 
