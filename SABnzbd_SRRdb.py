@@ -163,7 +163,7 @@ if len(release_basename.split()) > 1:
     sys.exit(0)
 
 print("Directory name: %s" % release_basename)
-media_file = return_largest_file(pyglob.escape(release_dir))
+media_file = return_largest_file(release_dir)
 ## Search for existing srr file and attempt to fetch if missing (function hopefully returns the full path)...
 srr_file = get_srr_file(release_dir, media_file)
             
