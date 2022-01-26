@@ -122,7 +122,7 @@ def deobfuscate_scene_file(srr_file, media_file):
 def verify_scene_rls(srr_file, release_dir):
     archived_files = rescene.info(srr_file)["archived_files"].values()
     if len(archived_files) > 0:
-        rescene.srr.verify_extracted_files(srr_file, release_dir, False)
+        return rescene.srr.verify_extracted_files(srr_file, release_dir, False)
     else:
         sfv_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.sfv'))
         if len(sfv_files):
@@ -146,8 +146,10 @@ def verify_scene_rls(srr_file, release_dir):
                     print(audio_file + " ERR")
             if crc_fail == 0:
                 print("Everything OK")
+                return 0
             else:
                 print("Album SFV check Failed!")
+                return 1
 
 def return_largest_file(release_dir):
     ## https://www.daniweb.com/programming/software-development/threads/234497/find-largest-file-in-directory#post1033536
@@ -197,5 +199,5 @@ if srr_file:
         print("No matching files to extract.")
     ####################################################################
     deobfuscate_scene_file(srr_file, media_file)
-    verify_scene_rls(srr_file, release_dir)
+    sys.exit(verify_scene_rls(srr_file, release_dir))
     ####################################################################
