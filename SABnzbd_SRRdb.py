@@ -2,10 +2,10 @@
 
 import glob as pyglob ## pyrescene's glob causes conflicts if we don't rename
 import json
-import requests
 import os
 import posixpath
-import pprint
+#import pprint
+import requests
 
 os.environ["RESCENE_NO_SPINNER"] = str(True)
 import rescene
@@ -153,13 +153,20 @@ def return_largest_file(release_dir):
     ## https://www.daniweb.com/programming/software-development/threads/234497/find-largest-file-in-directory#post1033536
     largest = sorted( (os.path.getsize(s), s) for s in pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.*')) )[-1][1]
     return largest
-    
+
 release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
 release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
 
 ## Abort post processing for releases with whitespace in their name
 if len(release_basename.split()) > 1:
     print("Literal space in release name (P2P?). Skipping.")
+    sys.exit(0)
+
+## Abort post processing for season pack releases
+pattern1 = '\.S[0-9]*'
+pattern2 = '\.S[0-9]*E[0-9]*\.'
+if re.search(pattern1, release_basename, re.IGNORECASE) and not re.search(pattern2, release_basename, re.IGNORECASE):
+    print("Season pack detected. Script will not run.")
     sys.exit(0)
 
 print("Directory name: %s" % release_basename)
