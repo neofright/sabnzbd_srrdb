@@ -37,8 +37,7 @@ def search_srrdb_api(search_query, search_type, result_type='srr'):
 
     if int(json_response['resultsCount']) > 1:
         print("More than one release returned from SRRdb. Please verify manually")
-        os.environ['SAB_FAIL_MSG'] = "Multiple srr available for release."
-        sys.exit(5)
+        sys.exit(0)
     
     response = None
     for item in json_response["results"]:
@@ -85,8 +84,7 @@ def search_for_and_download_srr(search_query, media_file):
             return True
         else:
             print("Unknown scene release, possibly P2P or no srr available.")
-            os.environ['SAB_FAIL_MSG'] = "No srr available for release."
-            sys.exit(3)
+            sys.exit(0)
     
 def get_srr_file(release_dir, media_file):
     srr_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.srr'))
@@ -156,48 +154,48 @@ def return_largest_file(release_dir):
     largest = sorted( (os.path.getsize(s), s) for s in pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.*')) )[-1][1]
     return largest
 
-release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
-release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
+if __name__ == "__main__":
+    release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
+    release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
 
-## Abort post processing for releases with whitespace in their name
-if len(release_basename.split()) > 1:
-    print("Literal space in release name (P2P?). Skipping.")
-    sys.exit(0)
+    ## Abort post processing for releases with whitespace in their name
+    if len(release_basename.split()) > 1:
+        print("Literal space in release name (P2P?). Skipping.")
+        sys.exit(0)
 
-## Abort post processing for season pack releases
-pattern1 = '\.S[0-9]*'
-pattern2 = '\.S[0-9]*E[0-9]*\.'
-if re.search(pattern1, release_basename, re.IGNORECASE) and not re.search(pattern2, release_basename, re.IGNORECASE):
-    print("Season pack detected. Script will not run.")
-    sys.exit(0)
+    ## Abort post processing for season pack releases
+    pattern = '\.S[0-9]*\.'
+    if re.search(pattern, release_basename, re.IGNORECASE):
+        print("Season pack detected. Script will not run.")
+        sys.exit(0)
 
-print("Directory name: %s" % release_basename)
-media_file = return_largest_file(release_dir)
-## Search for existing srr file and attempt to fetch if missing (function hopefully returns the full path)...
-srr_file = get_srr_file(release_dir, media_file)
-            
-## If an srr file has been found...
-if srr_file:
-    ####################################################################
-    out_folder = os.path.normpath(release_dir)
-    ## Extract only the file types from srr in the regex below:
-    to_extract = re.compile('^.*\.(nfo|m3u|jpg|sfv)$', re.IGNORECASE)
-    def decide_extraction(stored_fn):
-        return to_extract.match(stored_fn)
-    ####################################################################
-    files = rescene.extract_files(os.path.normpath(srr_file), out_folder, False, matcher=decide_extraction)
+    print("Directory name: %s" % release_basename)
+    media_file = return_largest_file(release_dir)
+    ## Search for existing srr file and attempt to fetch if missing (function hopefully returns the full path)...
+    srr_file = get_srr_file(release_dir, media_file)
+                
+    ## If an srr file has been found...
+    if srr_file:
+        ####################################################################
+        out_folder = os.path.normpath(release_dir)
+        ## Extract only the file types from srr in the regex below:
+        to_extract = re.compile('^.*\.(nfo|m3u|jpg|sfv)$', re.IGNORECASE)
+        def decide_extraction(stored_fn):
+            return to_extract.match(stored_fn)
+        ####################################################################
+        files = rescene.extract_files(os.path.normpath(srr_file), out_folder, False, matcher=decide_extraction)
 
-    # show which files are extracted + success or not
-    for efile, success in files:
-        file_name = efile[len(out_folder) + 1:]
-        if success:
-            print("{0}: extracted.".format(file_name))
-        else:
-            print("{0}: not extracted!".format(file_name), file=sys.stderr)
+        # show which files are extracted + success or not
+        for efile, success in files:
+            file_name = efile[len(out_folder) + 1:]
+            if success:
+                print("{0}: extracted.".format(file_name))
+            else:
+                print("{0}: not extracted!".format(file_name), file=sys.stderr)
 
-    if not len(files):
-        print("No matching files to extract.")
-    ####################################################################
-    deobfuscate_scene_file(srr_file, media_file)
-    sys.exit(verify_scene_rls(srr_file, release_dir))
-    ####################################################################
+        if not len(files):
+            print("No matching files to extract.")
+        ####################################################################
+        deobfuscate_scene_file(srr_file, media_file)
+        sys.exit(verify_scene_rls(srr_file, release_dir))
+        ####################################################################
