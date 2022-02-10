@@ -157,7 +157,7 @@ def return_largest_file(release_dir):
 if __name__ == "__main__":
     ## Change this to True to delete srr files after successful file verification
     ## https://github.com/neofright/sabnzbd_srrdb/issues/6
-    remove_valid_srr = True
+    remove_valid_srr = False
 
     release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
     release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
