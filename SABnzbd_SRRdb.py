@@ -155,6 +155,10 @@ def return_largest_file(release_dir):
     return largest
 
 if __name__ == "__main__":
+    ## Change this to True to delete srr files after successful file verification
+    ## https://github.com/neofright/sabnzbd_srrdb/issues/6
+    remove_valid_srr = True
+
     release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
     release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
 
@@ -196,6 +200,17 @@ if __name__ == "__main__":
         if not len(files):
             print("No matching files to extract.")
         ####################################################################
+        ## Rename the (video) file if it differs from the srr record (obfuscated).
         deobfuscate_scene_file(srr_file, media_file)
-        sys.exit(verify_scene_rls(srr_file, release_dir))
+        ####################################################################
+        ## Attempt to verify the crc32 of the (video) file and store the exit code.        
+        verification_exit_code = verify_scene_rls(srr_file, release_dir)
+
+        ## if verification was successful, check if we want to do cleanup.
+        if verification_exit_code == 0:
+            if remove_valid_srr:
+                os.remove(srr_file)
+        
+        ## Exit this script with the stored exit code of the verification process.
+        sys.exit(verification_exit_code)
         ####################################################################
