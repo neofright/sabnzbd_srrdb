@@ -195,7 +195,7 @@ if __name__ == "__main__":
             if success:
                 print("{0}: extracted.".format(file_name))
             else:
-                print("{0}: not extracted!".format(file_name), file=sys.stderr)
+                print("{0}: not extracted!".format(file_name))
 
         if not len(files):
             print("No matching files to extract.")
