@@ -47,6 +47,10 @@ Directory name: Arist_Name-Album_Name-CD-FLAC-0000-FOOBAR
 No srr file found from release, attempting to fetch from srrdb...
 SRRdb release identified by name, downloading srr...
 Extracting contents of srr file...
+00-artist_name-album_name-cd-flac-0000.nfo: extracted!
+00-artist_name-album_name-cd-flac-0000-proof.jpg: extracted!
+00-artist_name-album_name-cd-flac-0000.m3u: extracted!
+00-artist_name-album_name-cd-flac-0000.sfv: extracted!
 01-artist_name-track_name.flac OK
 02-artist_name-track_name.flac OK
 03-artist_name-track_name.flac OK
@@ -59,6 +63,15 @@ Extracting contents of srr file...
 10-artist_name-track_name.flac OK
 11-artist_name-track_name.flac OK
 Everything OK
+```
+### Game/Software (iso)
+```
+Directory name: Name_Of_A_Game-Group
+No srr file found from release, attempting to fetch from srrdb...
+SRRdb release identified by name, downloading srr...
+grp-game.nfo: extracted!
+grp-game.sfv: extracted!
+File OK: grp-game.iso.
 ```
 ## How do I know if a release is 'scene' when searching?!
 If your indexer supports it you can filter non predb releases on their website, or thanks to [this feature](https://github.com/theotherp/nzbhydra2/issues/647) in [nzbhydra2](https://github.com/theotherp/nzbhydra2) you can return only scene releases.
