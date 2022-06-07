@@ -96,7 +96,9 @@ def get_srr_file(release_dir, media_file):
                 if os.path.basename(srr_file).lower() != release_basename.lower() + ".srr":
                     print("Renaming %s to %s." % (os.path.basename(srr_file), release_basename + ".srr"))
                     os.rename(srr_file, os.path.join(release_dir, release_basename + ".srr"))
-                return os.path.join(release_dir, release_basename + ".srr")
+                    return os.path.join(release_dir, release_basename + ".srr")
+                else:
+                    return os.path.join(release_dir, os.path.basename(srr_file))
     else:
         print("No srr file found from release, attempting to fetch from srrdb...")
         if search_for_and_download_srr(release_basename, media_file):
