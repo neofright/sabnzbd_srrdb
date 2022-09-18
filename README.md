@@ -28,7 +28,7 @@ Finally
   OR
   # pip3 install -r requirements.txt
   ```
-Alternatively, download [pyReScene-0.7.tar.gz](https://pypi.org/project/pyReScene/#files) and place the "pyReScene-0.7/rescene" directory next to this script.
+Alternatively, download [pyReScene-0.7.tar.gz](https://pypi.org/project/pyReScene/#files) and place the "pyReScene-0.7/rescene" and "pyReScene-0.7/resample" directories next to this script.
 
 ## Examples:
 ### Movie
