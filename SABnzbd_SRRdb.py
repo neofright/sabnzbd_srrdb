@@ -11,6 +11,7 @@ os.environ["RESCENE_NO_SPINNER"] = str(True)
 import rescene
 from rescene.srr import *
 from rescene.utility import calculate_crc32, parse_sfv_file
+import resample
 
 from urllib.parse import urlsplit
 import sys
@@ -124,6 +125,8 @@ def verify_scene_rls(srr_file, release_dir):
     if len(archived_files) > 0:
         return rescene.srr.verify_extracted_files(srr_file, release_dir, False)
     else:
+        release_is_music = True ## Pretty safe assumption, mostly follows rescene logic.
+
         sfv_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.sfv'))
         if len(sfv_files):
             sfv_file = sfv_files[0]
@@ -156,10 +159,64 @@ def return_largest_file(release_dir):
     largest = sorted( (os.path.getsize(s), s) for s in pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.*')) )[-1][1]
     return largest
 
+"""
+    - Extract the '*sample.srs' file from the srr file (if one exists).
+        - List the sample filename from the srs file.
+        - Search for the sample file and remove it.
+        - Remove the srs file from disk (configurable).
+    - Note that I supply 'extract_paths=False' to 'extract_files'
+      which makes "./Sample/foo.srs" "./foo.srs"
+    - If SABnzbd is set to "Ignore any folders inside archives"
+      Then your sample file will be "./group-movie-1080p-sample.ext" instead of "./Sample/group-movie-1080p-sample.ext"
+    This function is pretty messy (so many path manipulations), but it works!
+    Maybe in the future it would be better to just recursively search for "group-movie-1080p-sample.ext"
+"""
+def delete_video_sample_files(srr_file, release_dir):
+    stored_files = rescene.info(srr_file)["stored_files"]
+    for sfile in stored_files.keys():
+        if sfile.endswith('sample.srs'.lower()):
+            files = rescene.extract_files(os.path.normpath(srr_file), release_dir, False, sfile)
+
+            # show which files are extracted + success or not
+            for efile, success in files:
+                file_name = efile[len(out_folder) + 1:]
+                if success:
+                    print("{0}: extracted.".format(file_name))
+                else:
+                    print("{0}: not extracted!".format(file_name))
+
+            ifile = os.path.join(release_dir, os.path.basename(sfile))
+            ftype = resample.file_type_info(ifile).file_type
+            sample = resample.sample_class_factory(ftype)
+            srs_data, tracks = sample.load_srs(ifile)
+
+            sample_file = None
+            ## './group-movie-1080p-sample.mkv'
+            if os.path.isfile(os.path.join(release_dir, srs_data.name)):
+                sample_file = os.path.join(release_dir, srs_data.name)
+
+            ## './Sample/group-movie-1080p-sample.mkv'
+            elif os.path.isfile(os.path.join(release_dir, os.path.join(os.path.dirname(sfile), srs_data.name))):
+                sample_file = os.path.join(release_dir, os.path.join(os.path.dirname(sfile), srs_data.name))
+
+            if sample_file != None:
+                os.remove(sample_file)
+                print("{0}: deleted!".format(os.path.relpath(sample_file, release_dir)))
+
+            if remove_srs:
+                os.remove(ifile)
+                print("{0}: deleted!".format(os.path.basename(ifile)))
+
 if __name__ == "__main__":
     ## Change this to True to delete srr files after successful file verification
     ## https://github.com/neofright/sabnzbd_srrdb/issues/6
     remove_valid_srr = False
+
+    ## https://github.com/sabnzbd/sabnzbd/issues/2296
+    remove_samples = True
+    remove_srs = True
+
+    release_is_music = False
 
     release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
     release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
@@ -212,7 +269,12 @@ if __name__ == "__main__":
         if verification_exit_code == 0:
             if remove_valid_srr:
                 os.remove(srr_file)
+                print("{0}: deleted!".format(os.path.relpath(sample_file, release_dir)))
         
+            if not release_is_music:
+                if remove_samples:
+                    delete_video_sample_files(srr_file, release_dir)
+
         ## Exit this script with the stored exit code of the verification process.
         sys.exit(verification_exit_code)
         ####################################################################
