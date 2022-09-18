@@ -3,11 +3,13 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
 
 ## Features:
 
-- Use an srr file to rename the release file to the correct filename - this is better deobfuscation than renaming the file to SAB_FILENAME + '.ext'
+- Use an srr file to rename the release file to the correct filename - this is better deobfuscation than renaming the file to `SAB_FILENAME` + '.ext'
 
 - Extract the contents of the srr file to provide missing nfo, m3u, sfv and jpg files.
 
 - Use rescene to verify (srr.py -q) if the scene file(s) matches the correct crc32 according to srr or sfv.
+
+- Delete video samples e.g. `group-movie-1080p-sample.mkv`
 
 
 
