@@ -278,7 +278,7 @@ if __name__ == "__main__":
         if verification_exit_code == 0:
             if remove_valid_srr:
                 os.remove(srr_file)
-                print("{0}: deleted!".format(os.path.relpath(sample_file, release_dir)))
+                print("{0}: deleted!".format(os.path.basename(srr_file)))
         
             if not release_is_music:
                 if remove_samples:
