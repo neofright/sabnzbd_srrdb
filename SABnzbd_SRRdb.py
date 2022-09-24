@@ -146,12 +146,16 @@ def verify_scene_rls(srr_file, release_dir):
                 if not os.path.isfile(audio_file_full_path):
                     audio_file_full_path = os.path.join(release_dir, audio_file.lower())
                 
-                crc32_hash = "%0.8X" % rescene.utility.calculate_crc32(audio_file_full_path)
-                if audio_crc.lower() == crc32_hash.lower():
-                    print(audio_file + " OK")
+                if os.path.isfile(audio_file_full_path):
+                    crc32_hash = "%0.8X" % rescene.utility.calculate_crc32(audio_file_full_path)
+                    if audio_crc.lower() == crc32_hash.lower():
+                        print(audio_file + " OK")
+                    else:
+                        crc_fail += 1
+                        print(audio_file + " ERR")
                 else:
-                    crc_fail += 1
-                    print(audio_file + " ERR")
+                        crc_fail += 1
+                        print(audio_file + " MISSING")
             if crc_fail == 0:
                 print("Everything OK")
                 return 0
