@@ -76,7 +76,7 @@ grp-game.sfv: extracted!
 File OK: grp-game.iso.
 ```
 ## How do I know if a release is 'scene' when searching?!
-If your indexer supports it you can filter non predb releases on their website, or thanks to [this feature](https://github.com/theotherp/nzbhydra2/issues/647) in [nzbhydra2](https://github.com/theotherp/nzbhydra2) you can return only scene releases.
+If your indexer supports it you can filter non predb releases on their website, or thanks to [this feature](https://github.com/theotherp/nzbhydra2/issues/647) in [nzbhydra2](https://github.com/theotherp/nzbhydra2) you can return only scene releases. Otherwise, use [a public predb website](https://en.wikipedia.org/wiki/Nuke_(warez)#List_of_public_predb_websites) or more obviously [SRRdb](https://www.srrdb.com/) itself.
 
 ## How can I use this script outside of SABnzbd?
 ```
@@ -84,3 +84,16 @@ cd /path/to/a/release
 export SAB_COMPLETE_DIR="$PWD"; export SAB_FINAL_NAME="$(basename "$PWD")"
 /path/to/location/of/SABnzbd_SRRdb.py
 ```
+## How can I configure the script's behavior?
+For now, and until someone suggests a better way, find the main function and edit the following:
+
+- `remove_valid_srr` (`False`) Deletes the srr file after succesfully verifying the release.
+
+- `remove_samples` (`True`) Attempts to identify and remove video samples.
+
+  - `remove_srs` (`True`) The extracted srs file used to identify the sample file is also removed.
+
+- `archive_nzb` (`True`) Store a copy of the NZB file in the release directory. E.g. if disk space is limited, you can delete the media and keep the nzb to re-download it again in the future.
+
+## This script killed my cat!!!
+__This program comes with ABSOLUTELY NO WARRANTY.__
