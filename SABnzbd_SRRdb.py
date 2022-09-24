@@ -298,7 +298,7 @@ if __name__ == "__main__":
                         import gzip
                         import shutil                        
                         with gzip.open(os.environ['SAB_ORIG_NZB_GZ'], 'rb') as f_in:
-                            with open( os.path.join( os.path.join(release_dir, release_basename + ".nzb"), 'wb') ) as f_out:
+                            with open(os.path.join(os.path.join(release_dir, release_basename + ".nzb")), 'wb') as f_out:
                                 shutil.copyfileobj(f_in, f_out)
 
         ## Exit this script with the stored exit code of the verification process.
