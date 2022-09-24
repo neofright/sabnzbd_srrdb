@@ -21,7 +21,12 @@ def search_srrdb_api(search_query, search_type, result_type='srr'):
         Search query. Type "archive" will search via CRC or "query" for a normal search string.
         Search response. Type "srr" to return the srr download URL. If undefined, defaults to a release name.
     '''
-    url_base = 'https://www.srrdb.com/api/search/'
+    if '.XXX.' not in search_query:
+        url = 'https://www.srrdb.com'
+    else:
+        url = 'https://www.srrxxx.com'
+    url_base = url + '/api/search/'
+
     if search_type == 'archive':
         url_query = r'archive-crc:' + search_query
     else:
@@ -44,7 +49,7 @@ def search_srrdb_api(search_query, search_type, result_type='srr'):
     for item in json_response["results"]:
         if "release" in item:
             if result_type == "srr":
-                response = posixpath.join("https://www.srrdb.com/download/srr/", item["release"])
+                response = posixpath.join( url + '/download/srr/', item["release"])
             else:
                 response = item["release"]
     return response
@@ -68,7 +73,7 @@ def download_release_srr(srr_url):
 def search_for_and_download_srr(search_query, media_file):
     """
         calls method search_srrdb_api() and attempts to find an srr by searching the directory name
-        if no results are found by the directory name, we calculate the crc32 of the mkv and search on that
+        if no results are found by the directory name, we calculate the crc32 of the largest file and search on that
     """
     srr_download_url = search_srrdb_api(search_query, 'query')
     if srr_download_url != None:

@@ -1,1 +1,2 @@
 pyrescene==0.7
+requests
