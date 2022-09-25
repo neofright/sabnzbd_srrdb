@@ -278,14 +278,15 @@ if __name__ == "__main__":
 
         ## if verification was successful
         if verification_exit_code == 0:
-            ## check if we want to do cleanup
-            if remove_valid_srr:
-                os.remove(srr_file)
-                print("{0}: deleted!".format(os.path.basename(srr_file)))
-        
+            ## check if we want to do cleanup       
             if not release_is_music:
                 if remove_samples:
                     delete_video_sample_files(srr_file, release_dir)
+
+            ## wait until after sample detection to decide on removing srr
+            if remove_valid_srr:
+                os.remove(srr_file)
+                print("{0}: deleted!".format(os.path.basename(srr_file)))
             
             ## archive the nzb file?
             if archive_nzb:
@@ -293,7 +294,7 @@ if __name__ == "__main__":
                 ## if the uploader didn't already include the nzb file...
                 if not len(nzb_files):
                     ## are we calling the script from sabnzbd? the nzb won't exist if we are calling it manually...
-                    if os.path.isfile(os.environ['SAB_ORIG_NZB_GZ']):
+                    if 'SAB_ORIG_NZB_GZ' in os.environ:
                         ## https://stackoverflow.com/a/44712152
                         import gzip
                         import shutil                        
