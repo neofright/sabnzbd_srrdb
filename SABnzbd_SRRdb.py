@@ -6,7 +6,6 @@ import io
 import json
 import os
 import posixpath
-#import pprint
 import requests
 
 os.environ["RESCENE_NO_SPINNER"] = str(True)
@@ -40,9 +39,6 @@ def search_srrdb_api(search_query, search_type, result_type='srr'):
 
     json_response = json.loads(response)
     
-    ## uncoment to view the json response from SRRdb for testing
-    #pprint.pprint(json_response)
-
     if int(json_response['resultsCount']) > 1:
         print("More than one release returned from SRRdb. Please verify manually")
         sys.exit(0)
