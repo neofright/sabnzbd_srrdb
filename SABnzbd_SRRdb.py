@@ -19,8 +19,8 @@ import sys
 
 def search_srrdb_api(search_query, search_type, result_type='srr'):
     '''
-        Search query. Type "archive" will search via CRC or "query" for a normal search string.
-        Search response. Type "srr" to return the srr download URL. If undefined, defaults to a release name.
+        search_type. "archive" searches via CRC instead of a search string.
+        result_type. "srr" returns the srr download URL. Otherwise returns found release name.
     '''
     if '.XXX.' not in search_query:
         url = 'https://www.srrdb.com'
@@ -228,7 +228,7 @@ if __name__ == "__main__":
     release_is_music = False
 
     release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
-    release_basename = os.environ['SAB_FINAL_NAME'] ## for nzbget use os.environ['NZBPP_NZBNAME']
+    release_basename = os.path.basename(release_dir)
 
     ## Abort post processing for releases with whitespace in their name
     if len(release_basename.split()) > 1:
