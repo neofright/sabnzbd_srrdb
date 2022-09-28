@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
+import contextlib
 import glob as pyglob ## pyrescene's glob causes conflicts if we don't rename
+import io
 import json
 import os
 import posixpath
@@ -273,8 +275,10 @@ if __name__ == "__main__":
         ## Rename the (video) file if it differs from the srr record (obfuscated).
         deobfuscate_scene_file(srr_file, media_file)
         ####################################################################
-        ## Attempt to verify the crc32 of the (video) file and store the exit code.        
-        verification_exit_code = verify_scene_rls(srr_file, release_dir)
+        ## Verify the crc32 hash(es) of the release and store the exit code and stdout.
+        with contextlib.redirect_stdout(io.StringIO()) as f:    
+            verification_exit_code = verify_scene_rls(srr_file, release_dir)
+        srr_stdout = f.getvalue()
 
         ## if verification was successful
         if verification_exit_code == 0:
@@ -302,6 +306,7 @@ if __name__ == "__main__":
                             with open(os.path.join(os.path.join(release_dir, release_basename + ".nzb")), 'wb') as f_out:
                                 shutil.copyfileobj(f_in, f_out)
 
-        ## Exit this script with the stored exit code of the verification process.
+        ## Exit this script with the stored exit code (and stdout) of the verification process.
+        print(srr_stdout)
         sys.exit(verification_exit_code)
         ####################################################################
