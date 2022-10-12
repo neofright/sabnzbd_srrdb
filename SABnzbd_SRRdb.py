@@ -128,7 +128,10 @@ def verify_scene_rls(srr_file, release_dir):
     if len(archived_files) > 0:
         return rescene.srr.verify_extracted_files(srr_file, release_dir, False)
     else:
-        release_is_music = True ## Pretty safe assumption, mostly follows rescene logic.
+        ## Pretty safe assumption, mostly follows rescene logic.
+        ## Globals are looked down upon, but I'm going for it!
+        global release_is_music
+        release_is_music = True
 
         sfv_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.sfv'))
         if len(sfv_files):
@@ -227,7 +230,12 @@ if __name__ == "__main__":
 
     release_is_music = False
 
-    release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
+    run_from_sab = True
+    if 'SAB_COMPLETE_DIR' in os.environ:    
+        release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
+    else:
+        release_dir = sys.argv[1]
+        run_from_sab = False
     release_basename = os.path.basename(release_dir)
 
     ## Abort post processing for releases with whitespace in their name
@@ -294,7 +302,7 @@ if __name__ == "__main__":
                 ## if the uploader didn't already include the nzb file...
                 if not len(nzb_files):
                     ## are we calling the script from sabnzbd? the nzb won't exist if we are calling it manually...
-                    if 'SAB_ORIG_NZB_GZ' in os.environ:
+                    if run_from_sab:
                         ## https://stackoverflow.com/a/44712152
                         import gzip
                         import shutil                        
