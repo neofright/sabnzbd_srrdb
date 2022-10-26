@@ -7,6 +7,7 @@ import json
 import os
 import posixpath
 import requests
+import shutil
 
 os.environ["RESCENE_NO_SPINNER"] = str(True)
 import rescene
@@ -236,6 +237,11 @@ if __name__ == "__main__":
     else:
         release_dir = sys.argv[1]
         run_from_sab = False
+
+    ## Things break if the path ends with a slash...
+    if release_dir.endswith('/'):
+        release_dir = release_dir[:-1]
+
     release_basename = os.path.basename(release_dir)
 
     ## Abort post processing for releases with whitespace in their name
