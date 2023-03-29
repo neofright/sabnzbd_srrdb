@@ -80,8 +80,7 @@ If your indexer supports it you can filter non predb releases on their website, 
 
 ## How can I use this script outside of SABnzbd?
 ```
-export SAB_COMPLETE_DIR="/path/to/a/release"
-/path/to/location/of/SABnzbd_SRRdb.py
+/path/to/location/of/SABnzbd_SRRdb.py "/path/to/a/release"
 ```
 ## How can I configure the script's behavior?
 For now, and until someone suggests a better way, find the main function and edit the following:
