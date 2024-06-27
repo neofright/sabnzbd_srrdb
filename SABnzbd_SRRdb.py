@@ -228,6 +228,7 @@ if __name__ == "__main__":
     remove_samples = True # https://github.com/sabnzbd/sabnzbd/issues/2296
     remove_srs = True
     archive_nzb = True
+    move_albums = False
 
     release_is_music = False
 
@@ -315,6 +316,20 @@ if __name__ == "__main__":
                         with gzip.open(os.environ['SAB_ORIG_NZB_GZ'], 'rb') as f_in:
                             with open(os.path.join(os.path.join(release_dir, release_basename + ".nzb")), 'wb') as f_out:
                                 shutil.copyfileobj(f_in, f_out)
+
+            ## move albums to artist dirs
+            if release_is_music and run_from_sab and move_albums:
+                artist_name_clean = release_basename.split('-')[0].replace('_',' ').strip()
+                if artist_name_clean.lower() not in ['va', 'ost']:
+                    artist_dir = os.path.join(os.path.dirname(release_dir), artist_name_clean)
+                    if not os.path.isdir(artist_dir):
+                        os.mkdir(artist_dir)
+
+                    if not os.path.isdir(os.path.join(artist_dir,release_basename)):
+                        shutil.move(release_dir, artist_dir)
+                    else:
+                        print('You already have this album dummy!!!')
+                        sys.exit(10)
 
         ## Exit this script with the stored exit code (and stdout) of the verification process.
         print(srr_stdout)
