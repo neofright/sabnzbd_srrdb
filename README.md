@@ -3,37 +3,40 @@ A simple Python post-processing script for SABnzbd to interact with [pyrescene](
 
 ## Features:
 
-- Use an srr file to rename the release file to the correct filename - this is better deobfuscation than renaming the file to `SAB_FILENAME` + '.ext'
+- Use an srr file to rename the release file to the correct filename. I believe this is better deobfuscation than renaming the file to `SAB_FILENAME.ext`.
 
 - Extract the contents of the srr file to provide missing nfo, m3u, sfv and jpg files.
 
-- Use rescene to verify (srr.py -q) if the scene file(s) matches the correct crc32 according to srr or sfv.
+- Use rescene to verify (`srr.py -q`) if the scene file(s) matches the correct crc32 according to srr or sfv.
 
 - Delete video samples e.g. `group-movie-1080p-sample.mkv`
 
 
 
 ## Installation:
-If you are using bare-metal or non containerised OS you can install pyrescene via pip. I have also included a requirements.txt
+This script depends on `pyrescene`.
 
-Fedora
-  ```
-  # dnf install -y python3-pip
-  ```
-Debian based
-  ```
-  # apt-get install python3-setuptools
-  ```
-Finally 
+To install with `pip`:
   ```
   # pip3 install pyrescene
   OR
-  # pip3 install -r requirements.txt
+  # pip3 install -r sabnzbd_srrdb/requirements.txt
   ```
-Alternatively, download [pyReScene-0.7.tar.gz](https://pypi.org/project/pyReScene/#files) and place the "pyReScene-0.7/rescene" and "pyReScene-0.7/resample" directories next to this script.
+Alternatively, download [pyReScene-0.7.tar.gz](https://pypi.org/project/pyReScene/#files) and place the `pyReScene-0.7/rescene` and `pyReScene-0.7/resample` directories next to this script. e.g.
+```
+$ tree -L 1
+.
+├── README.md
+├── SABnzbd_SRRdb.py
+├── requirements.txt
+├── resample
+└── rescene
 
-## Examples:
-### Movie
+2 directories, 3 files
+```
+
+## Examples
+### Movie:
 ```
 Directory name: Big.Buck.Bunny.2008.DTS.1080p.BluRay.x264-DARM
 No srr file found from release, attempting to fetch from srrdb...
@@ -43,7 +46,7 @@ darm-bigbuckbunny-1080p.sfv: extracted!
 Renaming abcd1234.mkv to darm-bigbuckbunny-1080p.mkv.
 File OK: darm-bigbuckbunny-1080p.mkv.
 ```
-### Music (FLAC or MP3)
+### Music (FLAC or MP3):
 ```
 Directory name: Arist_Name-Album_Name-CD-FLAC-0000-FOOBAR
 No srr file found from release, attempting to fetch from srrdb...
@@ -66,7 +69,7 @@ Extracting contents of srr file...
 11-artist_name-track_name.flac OK
 Everything OK
 ```
-### Game/Software (iso)
+### Game/Software (iso):
 ```
 Directory name: Name_Of_A_Game-Group
 No srr file found from release, attempting to fetch from srrdb...
@@ -93,5 +96,7 @@ For now, and until someone suggests a better way, find the main function and edi
 
 - `archive_nzb` (`True`) Store a copy of the NZB file in the release directory. E.g. if disk space is limited, you can delete the media and keep the nzb to re-download it again in the future.
 
-## This script killed my cat!!!
+- `move_albums` (`False`) For non archived releases (music), create a directory for the artist and move the album into it as a subdirectory.
+
+## This script is unreliable!!!
 __This program comes with ABSOLUTELY NO WARRANTY.__
