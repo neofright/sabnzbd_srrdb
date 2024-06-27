@@ -223,14 +223,10 @@ def delete_video_sample_files(srr_file, release_dir):
                 print("{0}: deleted!".format(os.path.basename(ifile)))
 
 if __name__ == "__main__":
-    ## Change this to True to delete srr files after successful file verification
-    ## https://github.com/neofright/sabnzbd_srrdb/issues/6
-    remove_valid_srr = False
-
-    ## https://github.com/sabnzbd/sabnzbd/issues/2296
-    remove_samples = True
+    # VARS
+    remove_valid_srr = False # https://github.com/neofright/sabnzbd_srrdb/issues/6
+    remove_samples = True # https://github.com/sabnzbd/sabnzbd/issues/2296
     remove_srs = True
-
     archive_nzb = True
 
     release_is_music = False
