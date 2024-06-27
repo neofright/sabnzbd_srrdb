@@ -33,17 +33,17 @@ def search_srrdb_api(search_query, search_type, result_type='srr'):
         url_query = r'archive-crc:' + search_query
     else:
         url_query = search_query
-    
+
     json_url = posixpath.join(url_base, url_query)
     r = requests.get(json_url)
     response = r.text
 
     json_response = json.loads(response)
-    
+
     if int(json_response['resultsCount']) > 1:
         print("More than one release returned from SRRdb. Please verify manually")
         sys.exit(0)
-    
+
     response = None
     for item in json_response["results"]:
         if "release" in item:
@@ -52,7 +52,7 @@ def search_srrdb_api(search_query, search_type, result_type='srr'):
             else:
                 response = item["release"]
     return response
-    
+
 def download_release_srr(srr_url):
     """
         - Take as an argument the download url of the srr file,
@@ -60,7 +60,7 @@ def download_release_srr(srr_url):
     """
     file_name = os.path.basename(urlsplit(srr_url).path) + ".srr"
     file_path = os.path.join(release_dir, file_name)
-    
+
     srr_file = requests.get(srr_url)
     if srr_file.status_code != 200:
         print("Warning: HTTP " + str(srr_file.status_code) + " : " + srr_file.text)
@@ -68,7 +68,7 @@ def download_release_srr(srr_url):
     else:
         with open(file_path, 'wb') as srr_file_path:
             srr_file_path.write(srr_file.content)
-    
+
 def search_for_and_download_srr(search_query, media_file):
     """
         calls method search_srrdb_api() and attempts to find an srr by searching the directory name
@@ -90,7 +90,7 @@ def search_for_and_download_srr(search_query, media_file):
         else:
             print("Unknown scene release, possibly P2P or no srr available.")
             sys.exit(0)
-    
+
 def get_srr_file(release_dir, media_file):
     srr_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.srr'))
     if len(srr_files):
@@ -108,16 +108,16 @@ def get_srr_file(release_dir, media_file):
         print("No srr file found from release, attempting to fetch from srrdb...")
         if search_for_and_download_srr(release_basename, media_file):
             return pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.srr'))[0]
-            
+
 def deobfuscate_scene_file(srr_file, media_file):
     archived_files = rescene.info(srr_file)["archived_files"].values()
     if len(archived_files) > 0:
         ext_filename = None
         for afile in archived_files:
             ext_filename = afile.file_name
-        
+
         if ext_filename != None:
-            media_basename = os.path.basename(media_file)            
+            media_basename = os.path.basename(media_file)
             if os.path.splitext(media_basename)[1].lower() == os.path.splitext(ext_filename)[1].lower():
                 ## Compare the returned archived file name with our media file
                 if media_basename != ext_filename:
@@ -233,7 +233,7 @@ if __name__ == "__main__":
     release_is_music = False
 
     run_from_sab = True
-    if 'SAB_COMPLETE_DIR' in os.environ:    
+    if 'SAB_COMPLETE_DIR' in os.environ:
         release_dir = os.environ['SAB_COMPLETE_DIR'] ## for nzbget use os.environ['NZBPP_DIRECTORY']
     else:
         release_dir = sys.argv[1]
@@ -260,7 +260,7 @@ if __name__ == "__main__":
     media_file = return_largest_file(release_dir)
     ## Search for existing srr file and attempt to fetch if missing (function hopefully returns the full path)...
     srr_file = get_srr_file(release_dir, media_file)
-                
+
     ## If an srr file has been found...
     if srr_file:
         ####################################################################
@@ -287,13 +287,13 @@ if __name__ == "__main__":
         deobfuscate_scene_file(srr_file, media_file)
         ####################################################################
         ## Verify the crc32 hash(es) of the release and store the exit code and stdout.
-        with contextlib.redirect_stdout(io.StringIO()) as f:    
+        with contextlib.redirect_stdout(io.StringIO()) as f:
             verification_exit_code = verify_scene_rls(srr_file, release_dir)
         srr_stdout = f.getvalue()
 
         ## if verification was successful
         if verification_exit_code == 0:
-            ## check if we want to do cleanup       
+            ## check if we want to do cleanup
             if not release_is_music:
                 if remove_samples:
                     delete_video_sample_files(srr_file, release_dir)
@@ -302,7 +302,7 @@ if __name__ == "__main__":
             if remove_valid_srr:
                 os.remove(srr_file)
                 print("{0}: deleted!".format(os.path.basename(srr_file)))
-            
+
             ## archive the nzb file?
             if archive_nzb:
                 nzb_files = pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.nzb'))
@@ -312,7 +312,7 @@ if __name__ == "__main__":
                     if run_from_sab:
                         ## https://stackoverflow.com/a/44712152
                         import gzip
-                        import shutil                        
+                        import shutil
                         with gzip.open(os.environ['SAB_ORIG_NZB_GZ'], 'rb') as f_in:
                             with open(os.path.join(os.path.join(release_dir, release_basename + ".nzb")), 'wb') as f_out:
                                 shutil.copyfileobj(f_in, f_out)
