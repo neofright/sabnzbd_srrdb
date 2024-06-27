@@ -167,8 +167,12 @@ def verify_scene_rls(srr_file, release_dir):
 
 def return_largest_file(release_dir):
     ## https://www.daniweb.com/programming/software-development/threads/234497/find-largest-file-in-directory#post1033536
-    largest = sorted( (os.path.getsize(s), s) for s in pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.*')) )[-1][1]
-    return largest
+    file_list = sorted( (os.path.getsize(s), s) for s in pyglob.glob(os.path.join(pyglob.escape(release_dir), '*.*')) if os.path.isfile(s) )
+    if len(file_list) > 0:
+        return file_list[-1][1]
+    else:
+        print(f"No files found in direcrory root. Exiting!")
+        sys.exit(0)
 
 """
     - Extract the '*sample.srs' file from the srr file (if one exists).
