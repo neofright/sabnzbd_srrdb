@@ -251,7 +251,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     ## Abort post processing for season pack releases
-    pattern = '\.S[0-9]*\.'
+    pattern = '\\.S[0-9]*\\.'
     if re.search(pattern, release_basename, re.IGNORECASE):
         print("Season pack detected. Script will not run.")
         sys.exit(0)
@@ -266,7 +266,7 @@ if __name__ == "__main__":
         ####################################################################
         out_folder = os.path.normpath(release_dir)
         ## Extract only the file types from srr in the regex below:
-        to_extract = re.compile('^.*\.(nfo|m3u|jpg|sfv)$', re.IGNORECASE)
+        to_extract = re.compile('^.*\\.(nfo|m3u|jpg|sfv)$', re.IGNORECASE)
         def decide_extraction(stored_fn):
             return to_extract.match(stored_fn)
         ####################################################################
