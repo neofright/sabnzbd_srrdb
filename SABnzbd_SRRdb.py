@@ -171,7 +171,7 @@ def return_largest_file(release_dir):
     if len(file_list) > 0:
         return file_list[-1][1]
     else:
-        print(f"No files found in direcrory root. Exiting!")
+        print(f"No files found in directory root. Exiting!")
         sys.exit(0)
 
 """
