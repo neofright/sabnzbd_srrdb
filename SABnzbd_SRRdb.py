@@ -189,7 +189,7 @@ def return_largest_file(release_dir):
 def delete_video_sample_files(srr_file, release_dir):
     stored_files = rescene.info(srr_file)["stored_files"]
     for sfile in stored_files.keys():
-        if sfile.endswith('sample.srs'.lower()):
+        if sfile.endswith('.srs') and 'sample' in sfile:
             files = rescene.extract_files(os.path.normpath(srr_file), release_dir, False, sfile)
 
             # show which files are extracted + success or not
