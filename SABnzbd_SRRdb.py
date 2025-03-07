@@ -162,7 +162,7 @@ def verify_scene_rls(srr_file, release_dir):
                 print("Everything OK")
                 return 0
             else:
-                print("Album SFV check Failed!")
+                print("Album SFV check failed!")
                 return 1
 
 def return_largest_file(release_dir):
