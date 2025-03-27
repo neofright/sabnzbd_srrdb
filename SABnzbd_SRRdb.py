@@ -244,6 +244,7 @@ if __name__ == "__main__":
         release_dir = release_dir[:-1]
 
     release_basename = os.path.basename(release_dir)
+    print("Directory name: %s" % release_basename)
 
     ## Abort post processing for releases with whitespace in their name
     if len(release_basename.split()) > 1:
@@ -256,7 +257,6 @@ if __name__ == "__main__":
         print("Season pack detected. Script will not run.")
         sys.exit(0)
 
-    print("Directory name: %s" % release_basename)
     media_file = return_largest_file(release_dir)
     ## Search for existing srr file and attempt to fetch if missing (function hopefully returns the full path)...
     srr_file = get_srr_file(release_dir, media_file)
