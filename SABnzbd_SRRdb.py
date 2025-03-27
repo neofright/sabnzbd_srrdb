@@ -252,7 +252,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     ## Abort post processing for season pack releases
-    pattern = '\\.S[0-9]*\\.'
+    pattern = '\\.S[0-9]+\\.'
     if re.search(pattern, release_basename, re.IGNORECASE):
         print("Season pack detected. Script will not run.")
         sys.exit(0)
