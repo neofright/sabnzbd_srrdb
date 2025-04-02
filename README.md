@@ -88,7 +88,7 @@ If your indexer supports it you can filter non predb releases on their website, 
 ## How can I configure the script's behavior?
 For now, and until someone suggests a better way, find the main function and edit the following:
 
-- `remove_valid_srr` (`False`) Deletes the srr file after succesfully verifying the release.
+- `remove_valid_srr` (`False`) Deletes the srr file after successfully verifying the release.
 
 - `remove_samples` (`True`) Attempts to identify and remove video samples.
 
