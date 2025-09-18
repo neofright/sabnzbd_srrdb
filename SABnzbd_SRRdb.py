@@ -117,9 +117,10 @@ def deobfuscate_scene_file(srr_file, media_file):
                 media_basename = os.path.basename(media_file)
                 if os.path.splitext(media_basename)[1].lower() == os.path.splitext(afile.file_name)[1].lower():
                     ## Compare the returned archived file name with our media file
-                    if media_basename != afile.file_name:
-                        print("Renaming %s to %s." % (media_basename, afile.file_name) )
-                        os.rename(media_file, os.path.join(release_dir, afile.file_name))
+                    if os.path.getsize(os.path.join(release_dir, media_file)) == afile.file_size:
+                        if media_basename != afile.file_name:
+                            print("Renaming %s to %s." % (media_basename, afile.file_name) )
+                            os.rename(media_file, os.path.join(release_dir, afile.file_name))
 
 def verify_scene_rls(srr_file, release_dir):
     archived_files = rescene.info(srr_file)["archived_files"].values()
