@@ -78,7 +78,7 @@ grp-game.sfv: extracted!
 File OK: grp-game.iso.
 ```
 ## How do I know if a release is 'scene' when searching?!
-If your indexer supports it you can filter non predb releases on their website, or thanks to [this feature](https://github.com/theotherp/nzbhydra2/issues/647) in [nzbhydra2](https://github.com/theotherp/nzbhydra2) you can return only scene releases. Otherwise, use [a public predb website](https://en.wikipedia.org/wiki/Nuke_(warez)#List_of_public_predb_websites) or more obviously [SRRdb](https://www.srrdb.com/) itself.
+If your indexer supports it; you can filter non predb releases on their website, and thanks to [this feature](https://github.com/theotherp/nzbhydra2/issues/647) in [nzbhydra2](https://github.com/theotherp/nzbhydra2) you can do the same. Otherwise, use [a public predb website](https://en.wikipedia.org/wiki/Nuke_(warez)#List_of_public_predb_websites) or more obviously [SRRdb](https://www.srrdb.com/) itself.
 
 ## How can I use this script outside of SABnzbd?
 ```
