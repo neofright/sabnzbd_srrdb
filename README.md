@@ -22,13 +22,14 @@ To install with `pip`:
   OR
   # pip3 install -r sabnzbd_srrdb/requirements.txt
   ```
-Alternatively, download [pyReScene-0.7.tar.gz](https://pypi.org/project/pyReScene/#files) and place the `pyReScene-0.7/rescene` and `pyReScene-0.7/resample` directories next to this script. e.g.
+Alternatively, download [pyReScene-0.7.tar.gz](https://pypi.org/project/pyReScene/#files) and [standard-nntplib-3.13.0](https://pypi.org/project/standard-nntplib/) and place the `pyReScene-0.7/rescene`, `pyReScene-0.7/resample` and `standard_nntplib-3.13.0/nntplib` directories next to this script. e.g.
 ```
 $ tree -L 1
 .
 ├── README.md
 ├── SABnzbd_SRRdb.py
 ├── requirements.txt
+├── nntplib
 ├── resample
 └── rescene
 
