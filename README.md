@@ -33,7 +33,7 @@ $ tree -L 1
 ├── resample
 └── rescene
 
-2 directories, 3 files
+3 directories, 3 files
 ```
 
 ## Examples
